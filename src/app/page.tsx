@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import InputMask from 'react-input-mask';
 
-// Definindo os tipos para os dados de um funcionário
 interface Funcionario {
   nome: string;
   turno: string;
@@ -17,7 +17,7 @@ export default function Home() {
     { nome: 'João', turno: 'Noturno', horario: '20:00', data: '2025-01-28' },
   ]);
 
-  // Função para mover um funcionário para o final da fila
+  // Função para mover um funcionário para o fim da fila
   const moverParaFim = (nome: string) => {
     setFila((prevFila) => {
       const index = prevFila.findIndex((funcionario) => funcionario.nome === nome);
@@ -57,15 +57,32 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-8">
-      <h2 className="text-3xl font-semibold text-center mb-8">Fila de Troca de Garrafão</h2>
-      
+      <h2 className="text-3xl font-semibold text-center mb-8">Controle de Troca de Garrafão - Grafnet</h2>
+
       {/* Formulário para adicionar novo funcionário */}
       <div className="mb-6">
         <h3 className="text-xl font-semibold text-center mb-4">Adicionar Funcionário</h3>
         <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
           <input name="nome" type="text" placeholder="Nome" className="border p-2 rounded-md w-60" required />
-          <input name="turno" type="text" placeholder="Turno" className="border p-2 rounded-md w-60" required />
-          <input name="horario" type="text" placeholder="Horário" className="border p-2 rounded-md w-60" required />
+          
+          {/* Seletor de turno */}
+          <select name="turno" className="border p-2 rounded-md w-60" required>
+            <option value="">Selecione o turno</option>
+            <option value="Diurno">Diurno</option>
+            <option value="Noturno">Noturno</option>
+          </select>
+
+          {/* Máscara para o campo de horário */}
+          <InputMask
+            mask="99:99"
+            maskChar={null}
+            name="horario"
+            type="text"
+            placeholder="Horário (24h)"
+            className="border p-2 rounded-md w-60"
+            required
+          />
+
           <input name="data" type="date" className="border p-2 rounded-md w-60" required />
           <button type="submit" className="bg-empresaRed text-white py-2 px-6 rounded-md mt-4">Adicionar</button>
         </form>

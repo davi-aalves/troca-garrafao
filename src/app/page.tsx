@@ -1,12 +1,18 @@
-// src/app/page.tsx
-
 'use client';
 
 import { useState } from 'react';
 
+// Definindo os tipos para os dados de um funcionário
+interface Funcionario {
+  nome: string;
+  turno: string;
+  horario: string;
+  data: string;
+}
+
 export default function Home() {
   // Estado da fila de trocas
-  const [fila, setFila] = useState([
+  const [fila, setFila] = useState<Funcionario[]>([
     { nome: 'Maria', turno: 'Diurno', horario: '08:00', data: '2025-01-28' },
     { nome: 'João', turno: 'Noturno', horario: '20:00', data: '2025-01-28' },
   ]);
@@ -34,6 +40,21 @@ export default function Home() {
     setFila((prevFila) => prevFila.filter((funcionario) => funcionario.nome !== nome));
   };
 
+  // Função para lidar com o envio do formulário
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Acessando os valores do formulário com a tipagem correta
+    const form = e.target as HTMLFormElement;
+    const nome = (form.nome as HTMLInputElement).value;
+    const turno = (form.turno as HTMLInputElement).value;
+    const horario = (form.horario as HTMLInputElement).value;
+    const data = (form.data as HTMLInputElement).value;
+
+    // Adicionando o funcionário
+    adicionarFuncionario(nome, turno, horario, data);
+  };
+
   return (
     <div className="container mx-auto p-8">
       <h2 className="text-3xl font-semibold text-center mb-8">Fila de Troca de Garrafão</h2>
@@ -41,17 +62,7 @@ export default function Home() {
       {/* Formulário para adicionar novo funcionário */}
       <div className="mb-6">
         <h3 className="text-xl font-semibold text-center mb-4">Adicionar Funcionário</h3>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const nome = (e.target.nome as HTMLInputElement).value;
-            const turno = (e.target.turno as HTMLInputElement).value;
-            const horario = (e.target.horario as HTMLInputElement).value;
-            const data = (e.target.data as HTMLInputElement).value;
-            adicionarFuncionario(nome, turno, horario, data);
-          }}
-          className="flex flex-col items-center gap-4"
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
           <input name="nome" type="text" placeholder="Nome" className="border p-2 rounded-md w-60" required />
           <input name="turno" type="text" placeholder="Turno" className="border p-2 rounded-md w-60" required />
           <input name="horario" type="text" placeholder="Horário" className="border p-2 rounded-md w-60" required />

@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import InputMask from 'react-input-mask';
+import { useState, useEffect, useRef } from 'react';
+import IMask from 'imask';
 
 interface Funcionario {
   nome: string;
@@ -16,6 +16,9 @@ export default function Home() {
     { nome: 'Maria', turno: 'Diurno', horario: '08:00', data: '2025-01-28' },
     { nome: 'João', turno: 'Noturno', horario: '20:00', data: '2025-01-28' },
   ]);
+
+  // Referência para o input de horário
+  const horarioRef = useRef<HTMLInputElement | null>(null);
 
   // Função para mover um funcionário para o fim da fila
   const moverParaFim = (nome: string) => {
@@ -55,6 +58,15 @@ export default function Home() {
     adicionarFuncionario(nome, turno, horario, data);
   };
 
+  // Aplicando a máscara no campo de horário após o componente ser montado
+  useEffect(() => {
+    if (horarioRef.current) {
+      IMask(horarioRef.current, {
+        mask: '00:00',
+      });
+    }
+  }, []);
+
   return (
     <div className="container mx-auto p-8">
       <h2 className="text-3xl font-semibold text-center mb-8">Controle de Troca de Garrafão - Grafnet</h2>
@@ -72,10 +84,9 @@ export default function Home() {
             <option value="Noturno">Noturno</option>
           </select>
 
-          {/* Máscara para o campo de horário */}
-          <InputMask
-            mask="99:99"
-            maskChar={null}
+          {/* Máscara para o campo de horário com imask */}
+          <input
+            ref={horarioRef}
             name="horario"
             type="text"
             placeholder="Horário (24h)"

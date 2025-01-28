@@ -1,4 +1,6 @@
 // src/app/page.tsx
+'use client'
+
 import { useState } from 'react';
 import FormularioFuncionario from '../components/FomularioFuncionario';
 import ListaFuncionarios from '../components/ListaFuncionarios';
@@ -38,7 +40,6 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-8">
-      <h2 className="text-3xl font-semibold text-center mb-8">Controle de Troca de Garrafão - Grafnet</h2>
       <FormularioFuncionario adicionarFuncionario={adicionarFuncionario} />
       <ListaFuncionarios
         fila={fila}
